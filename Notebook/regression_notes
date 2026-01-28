@@ -1,0 +1,962 @@
+Regression Model Selection — Practical Notes
+1️⃣ Linear Regression (NO punishment)
+
+Rule
+
+“Set knobs wherever you want to minimise error.”
+
+What happens
+
+Coefficients can become very large
+
+With correlated features → knobs fight each other
+
+Coefficients are unstable and noisy
+
+Implications
+
+Interpretation breaks under multicollinearity
+
+Predictions may still look okay
+
+📌 Use when
+
+Few features
+
+Low correlation
+
+You want a simple baseline
+
+📌 No control over instability
+
+2️⃣ Ridge Regression (L2) — “Don’t let knobs get big”
+
+Rule
+
+“You can use all knobs, but don’t turn any too far.”
+
+What happens
+
+All coefficients shrink
+
+No coefficient becomes exactly zero
+
+Correlated features share the load
+
+Key idea
+
+Ridge spreads importance across correlated features
+
+So:
+
+weight, displacement, horsepower
+→ all stay, all shrink
+
+
+❌ Ridge does NOT remove features
+
+📌 Use when
+
+Multicollinearity exists
+
+You want stable coefficients
+
+Prediction > feature selection
+
+📌 Ridge = stability, not selection
+
+3️⃣ Lasso Regression (L1) — “Some knobs must be OFF”
+
+Rule
+
+“You’re allowed to turn only a few knobs.”
+
+What happens
+
+Some coefficients become exactly zero
+
+Those features are removed
+
+With correlated features:
+
+Lasso chooses one
+
+Drops the rest arbitrarily
+
+⚠️ Important correction
+❌ Lasso does NOT magically find all irrelevant features
+✅ It finds a sparse solution, not a perfect one
+
+📌 Use when
+
+Feature selection is required
+
+High-dimensional data
+
+Correlation is low or moderate
+
+📌 Lasso = feature selection, unstable with correlation
+
+4️⃣ Elastic Net (L1 + L2) — “Choose few knobs, but let them share”
+
+Rule
+
+“Pick a small set of knobs, but don’t force only one when several are related.”
+
+What happens
+
+Some coefficients → zero (like Lasso)
+
+Correlated features → kept or dropped together (like Ridge)
+
+Much more stable than Lasso
+
+📌 Use when
+
+Many features
+
+Strong correlation
+
+You want feature selection + stability
+
+📌 Elastic Net = controlled feature selection
+
+5️⃣ k-NN Regression — “Look around, don’t learn a formula”
+
+Rule
+
+“Predict using the average of nearby points.”
+
+What happens
+
+No model is trained
+
+Prediction = average of k nearest neighbors
+
+Non-linear and local
+
+Critical requirements
+
+Features must be scaled
+
+Distance defines everything
+
+Behaviour
+
+Small k → noisy, high variance
+
+Large k → smooth, high bias
+
+Cannot extrapolate beyond data
+
+📌 Use when
+
+Small dataset
+
+Low dimensional data
+
+Strong local patterns
+
+❌ Do NOT use when
+
+Large datasets
+
+High-dimensional data
+
+Production systems
+
+📌 k-NN = local similarity, not generalisation
+
+
+Regression Model Selection — Practical Notes
+1️⃣ Linear Regression (NO punishment)
+
+Rule
+
+“Set knobs wherever you want to minimise error.”
+
+What happens
+
+Coefficients can become very large
+
+With correlated features → knobs fight each other
+
+Coefficients are unstable and noisy
+
+Implications
+
+Interpretation breaks under multicollinearity
+
+Predictions may still look okay
+
+📌 Use when
+
+Few features
+
+Low correlation
+
+You want a simple baseline
+
+📌 No control over instability
+
+2️⃣ Ridge Regression (L2) — “Don’t let knobs get big”
+
+Rule
+
+“You can use all knobs, but don’t turn any too far.”
+
+What happens
+
+All coefficients shrink
+
+No coefficient becomes exactly zero
+
+Correlated features share the load
+
+Key idea
+
+Ridge spreads importance across correlated features
+
+So:
+
+weight, displacement, horsepower
+→ all stay, all shrink
+
+
+❌ Ridge does NOT remove features
+
+📌 Use when
+
+Multicollinearity exists
+
+You want stable coefficients
+
+Prediction > feature selection
+
+📌 Ridge = stability, not selection
+
+3️⃣ Lasso Regression (L1) — “Some knobs must be OFF”
+
+Rule
+
+“You’re allowed to turn only a few knobs.”
+
+What happens
+
+Some coefficients become exactly zero
+
+Those features are removed
+
+With correlated features:
+
+Lasso chooses one
+
+Drops the rest arbitrarily
+
+⚠️ Important correction
+❌ Lasso does NOT magically find all irrelevant features
+✅ It finds a sparse solution, not a perfect one
+
+📌 Use when
+
+Feature selection is required
+
+High-dimensional data
+
+Correlation is low or moderate
+
+📌 Lasso = feature selection, unstable with correlation
+
+4️⃣ Elastic Net (L1 + L2) — “Choose few knobs, but let them share”
+
+Rule
+
+“Pick a small set of knobs, but don’t force only one when several are related.”
+
+What happens
+
+Some coefficients → zero (like Lasso)
+
+Correlated features → kept or dropped together (like Ridge)
+
+Much more stable than Lasso
+
+📌 Use when
+
+Many features
+
+Strong correlation
+
+You want feature selection + stability
+
+📌 Elastic Net = controlled feature selection
+
+5️⃣ k-NN Regression — “Look around, don’t learn a formula”
+
+Rule
+
+“Predict using the average of nearby points.”
+
+What happens
+
+No model is trained
+
+Prediction = average of k nearest neighbors
+
+Non-linear and local
+
+Critical requirements
+
+Features must be scaled
+
+Distance defines everything
+
+Behaviour
+
+Small k → noisy, high variance
+
+Large k → smooth, high bias
+
+Cannot extrapolate beyond data
+
+📌 Use when
+
+Small dataset
+
+Low dimensional data
+
+Strong local patterns
+
+❌ Do NOT use when
+
+Large datasets
+
+High-dimensional data
+
+Production systems
+
+📌 k-NN = local similarity, not generalisation
+
+
+6️⃣ Decision Tree Regressor — “Split the space, predict the average”
+Rule
+
+“If a split reduces error, split again.”
+
+What happens
+
+The model splits the feature space using if–else rules
+
+Each split is chosen to reduce variance / MSE
+
+Data is partitioned into regions (leaves)
+
+Prediction = mean of y values in the leaf
+
+How error is measured
+
+Uses variance / MSE reduction
+
+Chooses splits that make child nodes more homogeneous in y
+
+📌 No distance
+📌 No coefficients
+📌 No scaling required
+
+Behaviour
+
+Captures non-linear relationships
+
+Automatically models feature interactions
+
+Works well with continuous features
+
+⚠️ But:
+
+Can keep splitting until it memorises data
+
+Very high variance if unconstrained
+
+Training error ↓, test error ↑
+
+Why it overfits
+
+Greedy splitting
+
+Can isolate very small groups
+
+Especially bad with:
+
+deep trees
+
+high-cardinality categorical features
+
+How overfitting is controlled
+
+max_depth → limits how deep the tree can grow
+
+min_samples_leaf → enforces minimum samples per prediction
+
+min_samples_split → controls when splitting is allowed
+
+📌 Use when
+
+Data has non-linear patterns
+
+Feature interactions matter
+
+You want rule-based interpretability
+
+As a base model for ensembles (RF, Boosting)
+
+❌ Do NOT use when
+
+You want best predictive performance
+
+Data is noisy
+
+You don’t restrict tree growth
+
+One-line summary
+
+A decision tree regressor learns if–else rules that split the feature space to minimise variance, but it overfits unless depth and leaf size are constrained.
+
+
+7️⃣ Random Forest Regressor — “Average many overfitted trees”
+Rule
+
+“Train many different trees on resampled data and average their predictions.”
+
+What happens
+
+Multiple decision trees are trained
+
+Each tree:
+
+Sees a bootstrap sample of the data (rows sampled with replacement)
+
+Considers only a random subset of features at each split
+
+Each tree predicts:
+
+Mean of y values in its leaf
+
+Final prediction:
+
+Average of predictions from all trees
+
+How error is handled
+
+Each tree minimises variance / MSE locally (greedy splits)
+
+Forest reduces error by:
+
+Averaging uncorrelated tree errors
+
+Variance ↓ significantly
+
+Bias ≈ similar to a single tree
+
+📌 Error reduction comes from averaging, not smarter splits
+
+Key randomness (this is crucial)
+
+Row randomness (Bootstrap)
+
+Sample with replacement
+
+~63% of data seen per tree
+
+~37% is out-of-bag (OOB)
+
+Feature randomness
+
+Only max_features are considered per split
+
+Prevents dominant features from controlling all trees
+
+Prediction mechanism (important)
+
+Tree prediction = mean(y) in leaf
+
+Forest prediction = mean of tree predictions
+
+📌 Mean of means
+📌 No distances
+📌 No coefficients
+📌 No scaling required
+
+Behaviour
+
+Captures complex non-linear relationships
+
+Handles feature interactions automatically
+
+Robust to noise compared to a single tree
+
+Stable predictions (low variance)
+
+⚠️ But:
+
+Cannot extrapolate beyond training y range
+
+Slower and more memory-heavy than single trees
+
+Feature importance can be biased
+
+Less interpretable than one tree
+
+Why Random Forest works
+
+Trees are high-variance, low-bias models
+
+Randomisation makes trees less correlated
+
+Averaging cancels out individual tree errors
+
+How overfitting is controlled
+
+n_estimators → more trees → variance ↓
+
+max_depth → limits memorisation
+
+min_samples_leaf → stabilises leaf predictions
+
+max_features → reduces tree correlation
+
+📌 RF overfits much less than a single tree
+📌 But deep trees can still overfit if unconstrained
+
+Out-of-Bag (OOB) insight
+
+Each tree leaves out ~37% of data
+
+Those samples can be used for validation
+
+No separate validation set required
+
+📌 Use when
+
+Tabular data
+
+Strong non-linear patterns
+
+Feature interactions matter
+
+You want a strong baseline model
+
+Minimal preprocessing preferred
+
+❌ Do NOT use when
+
+Data is extremely large (memory constraints)
+
+You need extrapolation
+
+You need simple interpretability
+
+Very high-dimensional sparse data (e.g., text)
+
+One-line summary
+
+A Random Forest Regressor reduces variance by averaging predictions from many decision trees trained on bootstrapped data with feature randomness, making it far more stable than a single tree.
+
+If you want, next I can give you the same note format for:
+
+Gradient Boosting
+
+XGBoost vs RF (interview contrast)
+
+Why RF > linear models on tabular data
+
+Exact bias–variance trade-off explanation
+
+Just say which one.
+
+
+8️⃣ Support Vector Regression (SVR) — “Ignore small errors, stay flat”
+Rule
+
+“Fit the flattest possible function, and ignore errors up to ε.”
+
+What happens
+
+SVR fits a function (line or curve)
+
+It creates an ε-tube around the function
+
+Errors inside ε are ignored
+
+Errors outside ε are penalised
+
+Only some points matter → support vectors
+
+📌 Most points do nothing
+📌 Model is defined by a few critical points
+
+How prediction works
+
+Prediction is NOT an average
+
+Prediction is NOT distance-based
+
+Prediction = weighted contribution from support vectors only
+
+Linear SVR:
+
+𝑦
+^
+=
+𝑤
+𝑥
++
+𝑏
+y
+^
+	​
+
+=wx+b
+
+Kernel SVR:
+
+𝑦
+^
+=
+∑
+𝛼
+𝑖
+𝐾
+(
+𝑥
+𝑖
+,
+𝑥
+)
++
+𝑏
+y
+^
+	​
+
+=∑α
+i
+	​
+
+K(x
+i
+	​
+
+,x)+b
+
+📌 αᵢ ≠ 0 only for support vectors
+📌 Other points are ignored
+
+How error is measured
+
+Uses ε-insensitive loss
+
+Meaning:
+
+|y − ŷ| ≤ ε → loss = 0
+
+|y − ŷ| > ε → penalty applied
+
+📌 Focus is on tolerance, not exact fit
+
+Key control knobs
+
+ε (epsilon) → how much error you ignore
+
+C → how hard you punish points outside ε
+
+kernel → linear vs non-linear shape
+
+📌 ε controls noise tolerance
+📌 C controls strictness
+
+Behaviour
+
+Produces smooth, stable predictions
+
+Robust to small noise
+
+Works well when relationship is clean and continuous
+
+Uses very few points to define the model
+
+⚠️ But:
+
+Very sensitive to feature scaling
+
+Slow for large datasets
+
+Harder to tune than linear models
+
+Less intuitive than trees
+
+📌 Scaling is mandatory
+
+Why SVR works
+
+Minimises model complexity (flatness)
+
+Ignores insignificant errors
+
+Uses only boundary-violating points
+
+Avoids chasing noise
+
+How overfitting is controlled
+
+ε → ignores small fluctuations
+
+C → limits how much a point can pull the model
+
+Kernel choice → controls flexibility
+
+📌 Small C + large ε → very smooth
+📌 Large C + small ε → very strict (can overfit)
+
+📌 Use when
+
+Dataset is small to medium
+
+Relationship is smooth
+
+Noise should be ignored
+
+You want controlled generalisation
+
+❌ Do NOT use when
+
+Dataset is very large
+
+Features are not scaled
+
+Data is highly noisy
+
+You want easy interpretability
+
+
+7️⃣ Random Forest Regressor — “Average many noisy trees”
+Rule
+
+“Train many different trees independently and average their predictions.”
+
+What happens
+
+Multiple decision trees are trained
+
+Each tree:
+
+Sees a bootstrap sample (rows sampled with replacement)
+
+Uses random subset of features at each split
+
+Each tree overfits slightly
+
+Final prediction = average of all trees
+
+How prediction works
+
+Tree prediction = mean y in leaf
+
+Forest prediction = mean of tree predictions
+
+📌 Mean of means
+📌 No coefficients
+📌 No distances
+📌 No scaling required
+
+Why Random Forest works
+
+Decision trees → high variance
+
+Randomness makes trees less correlated
+
+Averaging cancels individual tree errors
+
+📌 Variance ↓↓↓
+📌 Bias ≈ same as a single tree
+
+Key randomness (VERY important)
+
+Row randomness (Bootstrap)
+
+~63% data seen per tree
+
+~37% left out → Out-of-Bag (OOB) samples
+
+Feature randomness
+
+Only max_features considered per split
+
+Prevents one strong feature from dominating
+
+Behaviour
+
+Captures non-linear relationships
+
+Automatically models feature interactions
+
+Robust to noise
+
+Very stable predictions
+
+⚠️ But:
+
+Cannot extrapolate beyond training target range
+
+Less interpretable than a single tree
+
+Memory & compute heavy
+
+How overfitting is controlled
+
+n_estimators → more trees → variance ↓
+
+max_depth → limits memorisation
+
+min_samples_leaf → stabilises predictions
+
+max_features → reduces tree correlation
+
+📌 RF overfits far less than a single tree
+📌 But unconstrained trees can still overfit
+
+📌 Use when
+
+Tabular data
+
+Strong non-linear patterns
+
+Feature interactions matter
+
+Minimal preprocessing preferred
+
+❌ Do NOT use when
+
+You need extrapolation
+
+Data is extremely large (memory limits)
+
+You need simple interpretability
+
+One-line summary
+
+Random Forest reduces variance by averaging predictions from many decorrelated decision trees trained on bootstrapped data.
+
+8️⃣ Gradient Boosting Regressor — “Fix your mistakes step by step”
+Rule
+
+“Train trees sequentially, each one correcting the errors of the previous model.”
+
+What happens
+
+Trees are trained one after another
+
+Each new tree:
+
+Sees the residuals (errors) of the current model
+
+Focuses more on hard-to-predict points
+
+Final prediction = sum of all trees’ outputs
+
+📌 Not averaging
+📌 Additive learning
+📌 Sequential dependence
+
+How prediction works
+ŷ(x) = tree₁(x) + η·tree₂(x) + η·tree₃(x) + ...
+
+
+Each tree is a weak learner
+
+η = learning rate (shrinkage)
+
+📌 Small corrections added gradually
+📌 No distances
+📌 No coefficients
+📌 No scaling required
+
+How error is handled
+
+Optimises a loss function (default: squared error)
+
+Trees are fit to negative gradients (residuals)
+
+📌 Big errors → more attention
+📌 Hard points get more weight
+
+Why Gradient Boosting works
+
+Reduces bias
+
+Converts many weak learners into a strong model
+
+Learns complex, fine-grained patterns
+
+📌 Boosting = learning from mistakes
+
+Behaviour
+
+Extremely powerful on tabular data
+
+Learns complex non-linear relationships
+
+Handles feature interactions well
+
+⚠️ But:
+
+Sensitive to outliers
+
+Can overfit noise
+
+Slower than Random Forest
+
+Requires careful tuning
+
+Why boosting is sensitive to outliers
+
+Outliers produce large residuals
+
+Boosting keeps trying to “fix” them
+
+Model may chase noise
+
+📌 Especially bad with squared error loss
+
+How overfitting is controlled
+
+learning_rate ↓ → smaller corrections
+
+n_estimators ↑ → gradual learning
+
+max_depth ↓ → weak learners
+
+subsample < 1 → adds randomness
+
+📌 Small learning rate + shallow trees = best practice
+
+📌 Use when
+
+You want maximum predictive performance
+
+Data has complex structure
+
+You can afford tuning
+
+Dataset is clean or well-regularised
+
+❌ Do NOT use when
+
+Data has heavy outliers (without robust loss)
+
+You want fast training
+
+You want simple interpretability
+
+One-line summary
+
+Gradient Boosting builds a strong regressor by sequentially adding weak trees that correct previous errors, reducing bias but increasing sensitivity to noise.
